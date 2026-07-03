@@ -4,7 +4,7 @@ services:
     restart: unless-stopped
     build:
       context: .
-      dockerfile: Dockerfile.back
+      dockerfile: Dockerfile
     ports:
       - "${BACK_PORT}:80"
     volumes:
