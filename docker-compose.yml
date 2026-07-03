@@ -1,0 +1,31 @@
+services:
+  back-heroku:
+    container_name: back-heroku
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: Dockerfile.back
+    ports:
+      - "${BACK_PORT}:80"
+    volumes:
+      - ./backend:/var/www/html
+    networks:
+      - app-network
+
+  front-heroku:
+    container_name: front-heroku
+    restart: unless-stopped
+    depends_on:
+      - back-heroku
+    build:
+      context: .
+      dockerfile: Dockerfile.front
+    ports:
+      - "${FRONT_PORT}:80"
+    volumes:
+      - ./frontend/public:/usr/share/nginx/html
+    networks:
+      - app-network
+
+networks:
+  app-network:
