@@ -1,17 +1,8 @@
-FROM php:8.2-apache
+FROM php:8.2-cli
 
-RUN a2enmod rewrite
+WORKDIR /app
 
-RUN a2dismod mpm_event || true \
- && a2enmod mpm_prefork
+COPY ./backend /app
 
-WORKDIR /var/www/html
-
-COPY ./backend /var/www/html
-
-# IMPORTANT: DocumentRoot FIXE (pas de variable)
-RUN sed -i 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/000-default.conf
-
-EXPOSE 80
-
-CMD ["apache2-foreground"]
+# Heroku utilise PORT dynamiquement
+CMD sh -c "php -S 0.0.0.0:$PORT -t public"
